@@ -20,3 +20,24 @@ module.exports = (on, config) => {
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config
 }
+
+const htmlvalidate = require("cypress-html-validate/dist/plugin");
+
+const config = {
+  rules: {
+    //foo: "error",
+  },
+};
+/* plugin options */
+const options = {
+  exclude: [],
+  include: [],
+  formatter(messages) {
+    console.log(messages);
+  },
+};
+
+module.exports = (on) => {
+  htmlvalidate.install(on, config, options);
+};
+ 

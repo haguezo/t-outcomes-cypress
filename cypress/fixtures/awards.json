@@ -1,0 +1,33 @@
+  {
+    "list": ["gold", "silver", "bronze", "provisional"],
+    "totals": {
+      "gold": 77,
+      "silver": 136,
+      "bronze": 61,
+      "provisional": 16
+    },
+    "gold": {
+      "total": 77,
+      "england": 71,
+      "wales": 3,
+      "scotland": 3
+    },
+    "silver": {
+      "total": 136,
+      "england": 129,
+      "wales": 5,
+      "scotland": 2
+    },
+    "bronze": {
+      "total": 61,
+      "england": 61,
+      "wales": 0,
+      "scotland": 0
+    },
+    "provisional": {
+      "total": 16,
+      "england": 16,
+      "wales": 0,
+      "scotland": 0
+    }
+  }

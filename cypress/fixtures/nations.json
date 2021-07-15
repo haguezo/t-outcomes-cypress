@@ -1,0 +1,68 @@
+  {
+    "list": ["england", "wales", "scotland"],
+    "totals": {
+      "england":277,
+      "wales": 8,
+      "scotland": 5
+    },
+    "england": {
+      "gold": 71,
+      "silver": 129,
+      "bronze": 61,
+      "provisional": 16,
+      "providers": [
+        {
+          "name": "Abingdon and Witney College",
+          "ukprn": 10000055
+        },
+        {
+          "name": "Aston University",
+          "ukprn": 10007759
+        },
+        {
+          "name": "Bath Spa University",
+          "ukprn": 10000571
+        }
+      ]
+    },
+    "wales": {
+      "gold": 3,
+      "silver": 5,
+      "bronze": 0,
+      "provisional": 0,
+      "providers": [
+        {
+          "name": "Bangor University",
+          "ukprn": 10007857
+        },
+        {
+          "name": "Cardiff University",
+          "ukprn": 10007814
+        },
+        {
+          "name": "Swansea University",
+          "ukprn": 10007855
+        }
+      ]
+    },
+    "scotland": {
+      "gold": 3,
+      "silver": 2,
+      "bronze": 0,
+      "provisional": 0,
+      "providers": [
+        {
+          "name": "University of Dundee",
+          "ukprn": 10007852
+        },
+        {
+          "name": "Heriot-Watt University",
+          "ukprn": 10007764
+        },
+        {
+          "name": "University of St Andrews",
+          "ukprn": 10007803
+        }
+      ]
+    }
+  }

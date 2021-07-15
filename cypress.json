@@ -1,3 +1,5 @@
 {
-    "defaultCommandTimeout": 5000
+    "baseUrl": "https://www.officeforstudents.org.uk/advice-and-guidance/teaching/tef-outcomes",
+    "defaultCommandTimeout": 8000
+
 }

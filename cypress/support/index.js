@@ -8,14 +8,19 @@
 
 /// <reference types="Cypress" />
 import './commands'
-
-const COOKIE_NAME = "CookieControl";
-const COOKIE_VALUE = "ACCEPTED";
+import 'cypress-html-validate/dist/commands'
 
 Cypress.on("window:before:load", window => {
-    window.document.cookie = `${COOKIE_NAME}=${COOKIE_VALUE}`;
-  });
+  window.document.cookie = `${COOKIE_NAME}=${COOKIE_VALUE}`
+})
 
-  before(() => {
-    cy.visit('https://www.officeforstudents.org.uk/advice-and-guidance/teaching/tef-outcomes')
-  })
+before(() => {
+  cy.visit('/#')
+})
+
+beforeEach(() => {
+  Cypress.Cookies.preserveOnce(COOKIE_NAME)
+})
+
+const COOKIE_NAME = "CookieControl"
+const COOKIE_VALUE = "ACCEPTED"
