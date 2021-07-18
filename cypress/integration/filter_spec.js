@@ -34,7 +34,7 @@ describe('Filtering results', () => {
             cy.reload()
         })
 
-        it.only('Filter does nothing when whitespace is entered', function () {
+        it('Filter does nothing when whitespace is entered', function () {
             // act
             cy.getByTestId('providerInput').type(`${WHITESPACE}{enter}`)
 
@@ -60,7 +60,7 @@ describe('Filtering results', () => {
             cy.getByTestId('scotlandBadge').contains(this.nations.totals.scotland).should('be.visible')
         })
 
-        it.only('Trims filter criteria of whitespace, displays correct filter message and filters results', () => {
+        it('Trims filter criteria of whitespace, displays correct filter message and filters results', () => {
             const FILTER_TERM = 'abertay'
 
             // act - add some whitespace before the filter term
