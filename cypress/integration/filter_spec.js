@@ -24,6 +24,13 @@ describe('Filtering results', () => {
     describe('Using the "Provider name" facet', () => {
 
         const WHITESPACE = '      '
+        var invalidFilterStrings = [
+            'wxyz', `${WHITESPACE}wxyz`, `${WHITESPACE}wxyz${WHITESPACE}`,
+            '1234', `${WHITESPACE}1234`, `${WHITESPACE}1234${WHITESPACE}`,
+            '&*^%$', `${WHITESPACE}&*^%$`, `${WHITESPACE}&*^%$${WHITESPACE}`
+        ]
+        var caseVariantStrings = ['abertay', 'ABERTAY', 'Abertay', 'aberTAY', 'ABERtay',
+            `${WHITESPACE}abertay`, `${WHITESPACE}abertay${WHITESPACE}`]
 
         beforeEach(() => {
             cy.fixture("awards").as('awards')
@@ -60,27 +67,47 @@ describe('Filtering results', () => {
             cy.getByTestId('scotlandBadge').contains(this.nations.totals.scotland).should('be.visible')
         })
 
-        it('Trims filter criteria of whitespace, displays correct filter message and filters results', () => {
-            const FILTER_TERM = 'abertay'
 
-            // act - add some whitespace before the filter term
-            cy.getByTestId('providerInput').type(`${WHITESPACE}${FILTER_TERM}{enter}`)
+        // Runs the same test with different data
+        caseVariantStrings.forEach((caseVariantString) => {
 
-            // assert - filter term should be trimmed
-            cy.getByTestId('filterMessage').contains('Showing results for:')
-            cy.getByTestId('filteredProvider').contains(FILTER_TERM).should('be.visible')
-            cy.getByTestId('clearAll').contains('Clear filter').should('be.visible')
+            it(`Case variant filter term "${caseVariantString}" displays expected result and correct filter message (trimming the filter term where necessary))`, () => {
 
-            // assert - single row is returned (Silver award, Scotland)
-            cy.get('tr.providerName').should('have.length', 1)
-                .contains('University of Abertay Dundee')
-                .get('app-rating-component').get('div').should('have.class', 'Silver')
-            cy.getByTestId('silverButton').should('be.visible')
-            cy.getByTestId('silverBadge').contains(1).should('be.visible')
-            cy.getByTestId('scotlandButton').should('be.visible')
-            cy.getByTestId('scotlandBadge').contains(1).should('be.visible')
+                // act - add some whitespace before the filter term
+                cy.getByTestId('providerInput').type(`${WHITESPACE}${caseVariantString}{enter}`)
+
+                // assert - filter term should be trimmed
+                cy.getByTestId('filterMessage').contains('Showing results for:')
+                cy.getByTestId('filteredProvider').contains(caseVariantString.trim()).should('be.visible')
+                cy.getByTestId('clearAll').contains('Clear filter').should('be.visible')
+
+                // assert - single row is returned (Silver award, Scotland)
+                cy.get('tr.providerName').should('have.length', 1)
+                    .contains('University of Abertay Dundee')
+                    .get('app-rating-component').get('div').should('have.class', 'Silver')
+                cy.getByTestId('silverButton').should('be.visible')
+                cy.getByTestId('silverBadge').contains(1).should('be.visible')
+                cy.getByTestId('scotlandButton').should('be.visible')
+                cy.getByTestId('scotlandBadge').contains(1).should('be.visible')
+            })
         })
 
+        // Runs the same test with different data
+        invalidFilterStrings.forEach((invalidString) => {
+            it(`Invalid filter term "${invalidString}" does not find any results and displays correct filter message`, () => {
+
+                // act
+                cy.getByTestId('providerInput').type(`${invalidString}{enter}`)
+
+                // assert - filter term should be trimmed and button displayed
+                cy.getByTestId('filterMessage').contains('Showing results for:')
+                cy.getByTestId('filteredProvider').contains(invalidString.trim()).should('be.visible')
+                cy.getByTestId('clearAll').contains('Clear filter').should('be.visible')
+
+                // assert - no results should be returned
+                cy.get('tr.providerName').should('have.length', 0)
+            })
+        })
     })
 
     describe('Using the "Award type" facet', () => {
@@ -280,6 +307,7 @@ describe('Filtering results', () => {
 
     describe('Using both facets', () => {
 
+        // Loading fixture data before each test - need 
         beforeEach(() => {
             cy.fixture("awards").as('awards')
             cy.fixture("nations").as('nations')
@@ -289,7 +317,8 @@ describe('Filtering results', () => {
             cy.reload()
         })
 
-        it('Clicking an award and a nation displays the correct badges', function () {
+
+        it(`Clicking an award and nation combination displays the correct badges`, function () {
             // Loop through each award
             this.awards.list.forEach((award) => {
 
@@ -313,7 +342,6 @@ describe('Filtering results', () => {
                     cy.getByTestId('clearAll').click()
                 })
             })
-
         })
 
         it('Clicking the Bronze award does not display Wales or Scotland nations because the count is zero', () => {
