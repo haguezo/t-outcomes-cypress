@@ -23,6 +23,7 @@ describe('Filtering results', () => {
 
     describe('Using the "Provider name" facet', () => {
 
+        // EXAMPLE: Inline test data
         const WHITESPACE = '      '
         var invalidFilterStrings = [
             'wxyz', `${WHITESPACE}wxyz`, `${WHITESPACE}wxyz${WHITESPACE}`,
@@ -32,6 +33,7 @@ describe('Filtering results', () => {
         var caseVariantStrings = ['abertay', 'ABERTAY', 'Abertay', 'aberTAY', 'ABERtay',
             `${WHITESPACE}abertay`, `${WHITESPACE}abertay${WHITESPACE}`]
 
+        // EXAMPLE: Loading fixture data before each test and creating aliases to use in tests
         beforeEach(() => {
             cy.fixture("awards").as('awards')
             cy.fixture("nations").as('nations')
@@ -41,6 +43,7 @@ describe('Filtering results', () => {
             cy.reload()
         })
 
+        // EXAMPLE: Accessing aliases via 'this' (synchronous, must use the regular function syntax)
         it('Filter does nothing when whitespace is entered', function () {
             // act
             cy.getByTestId('providerInput').type(`${WHITESPACE}{enter}`)
@@ -67,8 +70,7 @@ describe('Filtering results', () => {
             cy.getByTestId('scotlandBadge').contains(this.nations.totals.scotland).should('be.visible')
         })
 
-
-        // Runs the same test with different data
+        // EXAMPLE: Running the same test with different data (akin to DataTestMethod)
         caseVariantStrings.forEach((caseVariantString) => {
 
             it(`Case variant filter term "${caseVariantString}" displays expected result and correct filter message (trimming the filter term where necessary))`, () => {
@@ -92,7 +94,7 @@ describe('Filtering results', () => {
             })
         })
 
-        // Runs the same test with different data
+        // EXAMPLE: Running  the same test with different data (akin to DataTestMethod)
         invalidFilterStrings.forEach((invalidString) => {
             it(`Invalid filter term "${invalidString}" does not find any results and displays correct filter message`, () => {
 
@@ -113,7 +115,7 @@ describe('Filtering results', () => {
     describe('Using the "Award type" facet', () => {
 
         beforeEach(() => {
-            cy.fixture("awards").as('awards')
+            cy.fixture('awards').as('awards')
         })
 
         afterEach(() => {
@@ -131,9 +133,10 @@ describe('Filtering results', () => {
                 .getByTestId('clearAll').contains('Clear filter')
         }
 
+        // EXAMPLE: Accessing an alias using get() and @ syntax which avoids use of 'this' (asynchronous)
         it('Clicking the Gold award type displays only Gold results and correct filter message', () => {
             // arrange
-            cy.fixture("awards").then((awards) => {
+            cy.get('@awards').then((awards) => {
                 // act
                 cy.getByTestId('goldButton').should('be.visible').click()
 
@@ -155,7 +158,7 @@ describe('Filtering results', () => {
 
         it('Clicking the Silver award type displays only Silver results and correct filter message', () => {
             // arrange
-            cy.fixture("awards").then((awards) => {
+            cy.get('@awards').then((awards) => {
                 // act
                 cy.getByTestId('silverButton').should('be.visible').click()
 
@@ -177,7 +180,7 @@ describe('Filtering results', () => {
 
         it('Clicking the Bronze award type displays only Bronze results and correct filter message', () => {
             // arrange
-            cy.fixture("awards").then((awards) => {
+            cy.get('@awards').then((awards) => {
                 // act
                 cy.getByTestId('bronzeButton').should('be.visible').click()
 
@@ -199,7 +202,7 @@ describe('Filtering results', () => {
 
         it('Clicking the Provisional award type displays only Provisional results and correct filter message', () => {
             // arrange
-            cy.fixture("awards").then((awards) => {
+            cy.get('@awards').then((awards) => {
                 // act
                 cy.getByTestId('provisionalButton').should('be.visible').click()
 
@@ -232,7 +235,7 @@ describe('Filtering results', () => {
 
         function checkFilteredNations(nation) {
             // assert - spot check provider "nation"
-            cy.fixture("nations").then(nations => {
+            cy.get('@nations').then(nations => {
                 nations[nation.toLowerCase()].providers.forEach((provider) => {
                     cy.getByTestId("providerList")
                         .contains('a', provider.name)
@@ -307,39 +310,37 @@ describe('Filtering results', () => {
 
     describe('Using both facets', () => {
 
-        // Loading fixture data before each test - need 
-        beforeEach(() => {
-            cy.fixture("awards").as('awards')
-            cy.fixture("nations").as('nations')
-        })
-
         afterEach(() => {
             cy.reload()
         })
 
-
+        // EXAMPLE: Asynchronous accessing of fixture data
         it(`Clicking an award and nation combination displays the correct badges`, function () {
             // Loop through each award
-            this.awards.list.forEach((award) => {
+            cy.fixture('awards').then((awards) => {
+                awards.list.forEach((award) => {
 
-                // Loop through each nation
-                this.nations.list.forEach((nation) => {
+                    // Loop through each nation
+                    cy.fixture('nations').then((nations) => {
+                        nations.list.forEach((nation) => {
 
-                    // act - click an Award button
-                    cy.getByTestId(`${award}Button`).click()
+                            // act - click an Award button
+                            cy.getByTestId(`${award}Button`).click()
 
-                    // act - if this nation has awards of this type...   
-                    var awardValue = this.awards[`${award}`][`${nation}`]
-                    if (awardValue > 0) {
-                        // act - click the Nation button
-                        cy.getByTestId(`${nation}Button`).click()
+                            // act - if this nation has awards of this type...   
+                            var awardValue = awards[`${award}`][`${nation}`]
+                            if (awardValue > 0) {
+                                // act - click the Nation button
+                                cy.getByTestId(`${nation}Button`).click()
 
-                        // assert - check the badge values match
-                        cy.getByTestId(`${award}Badge`).contains(awardValue)
-                        cy.getByTestId(`${nation}Badge`).contains(awardValue)
-                    }
+                                // assert - check the badge values match
+                                cy.getByTestId(`${award}Badge`).contains(awardValue)
+                                cy.getByTestId(`${nation}Badge`).contains(awardValue)
+                            }
 
-                    cy.getByTestId('clearAll').click()
+                            cy.getByTestId('clearAll').click()
+                        })
+                    })
                 })
             })
         })
