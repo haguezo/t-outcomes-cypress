@@ -1,5 +1,9 @@
 describe('Filtering results', () => {
 
+    before(() => {
+        cy.visit('/#')
+    })
+
     it('Displays the filter menu with search box', () => {
         cy.getByTestId('filter').should('be.visible')
             .get('h4:first').contains('Provider name')
@@ -342,7 +346,7 @@ describe('Filtering results', () => {
 
     })
 
-    describe('Using both facets', () => {
+    describe('Using both "Award and "Nation" facets', () => {
 
         afterEach(() => {
             cy.reload()

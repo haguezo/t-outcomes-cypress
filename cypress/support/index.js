@@ -14,10 +14,6 @@ Cypress.on("window:before:load", window => {
   window.document.cookie = `${COOKIE_NAME}=${COOKIE_VALUE}`
 })
 
-before(() => {
-  cy.visit('/#')
-})
-
 beforeEach(() => {
   Cypress.Cookies.preserveOnce(COOKIE_NAME)
 })
