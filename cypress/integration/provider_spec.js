@@ -1,4 +1,4 @@
-describe('Navigating to a provider page', () => {
+describe('Checking links for providers in each nation', () => {
 
     // EXAMPLE: Using 'require' and a const for test data from a fixture
     const nations = require('../fixtures/nations.json')
@@ -6,12 +6,12 @@ describe('Navigating to a provider page', () => {
     nations.list.forEach((nation) => {
 
         nations[nation.toLowerCase()].providers.forEach((provider) => {
-            it.only(`Link for '${provider.name}' in ${nation} is displayed with correct URL for UKPRN ${provider.ukprn} and request for href returns 200`, () => {
+            it(`Link for '${provider.name}' in ${nation} is displayed with correct URL for UKPRN ${provider.ukprn} and request for href returns 200`, () => {
     
                 // act
                 cy.getByTestId(`${nation}Button`).click()
 
-                // EXAMPLE: Testing a link including making an HTTP request to ensure it is valid and returning expected status 
+                // EXAMPLE: Testing link including making an HTTP request to ensure it is valid and returning expected status 
                 cy.get(`a:contains(${provider.name})`)
                     .should('be.visible')
                     .invoke('attr', 'href')
@@ -23,6 +23,5 @@ describe('Navigating to a provider page', () => {
                 cy.reload()
             })       
         })
-
     })
 })

@@ -17,3 +17,13 @@
 Cypress.Commands.add('getByTestId', (selector) => {
   return cy.get(`[data-test-id=${selector}]`)
 })
+
+Cypress.Commands.add('getRandomString', (length) => {
+  let random_string = '';
+  let random_ascii;
+  for(let i = 0; i < length; i++) {
+      random_ascii = Math.floor((Math.random() * 25) + 97);
+      random_string += String.fromCharCode(random_ascii)
+  }
+  return random_string
+})

@@ -25,13 +25,14 @@ describe('Filtering results', () => {
 
         // EXAMPLE: Inline test data
         const WHITESPACE = '      '
-        var invalidFilterStrings = [
+        let invalidFilterStrings = [
             'wxyz', `${WHITESPACE}wxyz`, `${WHITESPACE}wxyz${WHITESPACE}`,
             '1234', `${WHITESPACE}1234`, `${WHITESPACE}1234${WHITESPACE}`,
             '&*^%$', `${WHITESPACE}&*^%$`, `${WHITESPACE}&*^%$${WHITESPACE}`
         ]
-        var caseVariantStrings = ['abertay', 'ABERTAY', 'Abertay', 'aberTAY', 'ABERtay',
-            `${WHITESPACE}abertay`, `${WHITESPACE}abertay${WHITESPACE}`]
+        let caseVariantStrings = ['abertay', 'ABERTAY', 'Abertay', 'aberTAY', 'ABERtay', `${WHITESPACE}abertay`, `${WHITESPACE}abertay${WHITESPACE}`]
+        let validProviderNameLengths = [1, 19, 20]
+        let invalidProviderNameLength = 21
 
         // EXAMPLE: Loading fixture data before each test and creating aliases to use in tests
         beforeEach(() => {
@@ -41,6 +42,39 @@ describe('Filtering results', () => {
 
         afterEach(() => {
             cy.reload()
+        })
+
+        it('Provider name input has max length of 20 characters', () => {
+            cy.getByTestId('providerInput').invoke('attr', 'maxlength').should('contain', '20')
+        })
+
+        // EXAMPLE: Valid boundary values 
+        validProviderNameLengths.forEach((length) => {
+            it(`Provider name input accepts up to ${length} characters`, () => {
+                // arrange
+                cy.getRandomString(length).then((randomString) => {
+                    // act
+                    cy.getByTestId('providerInput').type(randomString)
+
+                    // assert
+                    cy.getByTestId('filteredProvider').should('contain', randomString)
+                })
+            })
+        })
+
+        it(`Provider name accepts only the first 20 characters of the 21 character input '${invalidProviderNameLength}'`, () => {
+            // arrange
+            cy.getRandomString(invalidProviderNameLength).then((randomString) => {
+
+                let first20Chars = randomString.substring(0, 20)
+
+                // act
+                cy.getByTestId('providerInput').type(randomString)
+
+                // assert
+                cy.getByTestId('providerInput').should('have.value', first20Chars)
+                cy.getByTestId('filteredProvider').should('be.visible').and('contain', first20Chars)
+            })
         })
 
         // EXAMPLE: Accessing aliases via 'this' (synchronous, must use the regular function syntax)
@@ -328,7 +362,7 @@ describe('Filtering results', () => {
                             cy.getByTestId(`${award}Button`).click()
 
                             // act - if this nation has awards of this type...   
-                            var awardValue = awards[`${award}`][`${nation}`]
+                            let awardValue = awards[`${award}`][`${nation}`]
                             if (awardValue > 0) {
                                 // act - click the Nation button
                                 cy.getByTestId(`${nation}Button`).click()
