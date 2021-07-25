@@ -4,6 +4,18 @@ Created as a learning exercise to experiment with the JavaScript end to end (E2E
 
 The application under test is an [Angular](https://angular.io/) web app.
 
+## How to run these tests
+
+- Clone the repository
+- Open the folder in Visual Studio Code
+
+In the terminal window:
+
+- Run `npm install`
+- Run `npm run cypress`
+
+The Cypress Test Runner will open and the available tests can be run against the [live site](https://www.officeforstudents.org.uk/advice-and-guidance/teaching/tef-outcomes/).
+
 
 
 ## Test Automation with Protractor
