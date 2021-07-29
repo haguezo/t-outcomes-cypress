@@ -99,7 +99,6 @@ describe('Using fixture data from "nations.json" to test a sample of provider pa
                             cy.request(href).its('status').should('eq', 200)
                         })
                 })
-
             })
         })
     })
